@@ -2,24 +2,21 @@ package com.reto.soyyo.dtos.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class UserRequest {
-    @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 50)
-    private String username;
+public record UserRequest (
+        @NotBlank(message = "Username is required")
+        @Size(min = 3, max = 50)
+        String username,
 
-    @NotBlank(message = "The email is required")
-    @Email(message = "Please provide a valid email address")
-    private String email;
+        @NotBlank(message = "The email is required")
+        @Email(message = "Please provide a valid email address", regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+        String email,
 
-    @NotBlank(message = "The password is required")
-    @Size(min = 8, max = 128, message = "The password must be at least 8 characters long")
-    private String password;
+        @NotBlank(message = "The password is required")
+        @Pattern(message = "Password must contain a minimum of 8 characters, including a number, one uppercase letter, one lowercase letter and one special character", regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.])(?=\\S+$).{8,}$")
+        String password
+) {
 }
