@@ -35,6 +35,13 @@ public class ProgressController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Progress> updateProgress(@PathVariable Long id, @RequestBody Progress progressDetails) {
+        return progressService.updateProgress(id, progressDetails)
+                .map(updatedProgress -> new ResponseEntity<>(updatedProgress, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProgress(@PathVariable Long id) {
         progressService.deleteProgress(id);

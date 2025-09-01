@@ -26,6 +26,15 @@ public class ChallengeService {
         return challengeRepository.findById(id);
     }
 
+    public Optional<Challenge> updateChallenge(Long id, Challenge challengeDetails) {
+        return challengeRepository.findById(id)
+                .map(challenge -> {
+                    challenge.setTitle(challengeDetails.getTitle());
+                    challenge.setDescription(challengeDetails.getDescription());
+                    return challengeRepository.save(challenge);
+                });
+    }
+
     public void deleteChallenge(Long id) {
         challengeRepository.deleteById(id);
     }

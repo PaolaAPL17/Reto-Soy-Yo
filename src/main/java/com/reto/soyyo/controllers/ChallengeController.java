@@ -35,6 +35,13 @@ public class ChallengeController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Challenge> updateChallenge(@PathVariable Long id, @RequestBody Challenge challengeDetails) {
+        return challengeService.updateChallenge(id, challengeDetails)
+                .map(updatedChallenge -> new ResponseEntity<>(updatedChallenge, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteChallenge(@PathVariable Long id) {
         challengeService.deleteChallenge(id);

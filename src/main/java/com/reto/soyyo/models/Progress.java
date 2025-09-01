@@ -29,5 +29,5 @@ public class Progress {
 
     @ManyToOne
     @JoinColumn(name = "challenge_id",nullable = false)
-    private Challenge challenges;
+    private Challenge challenge;
 }
