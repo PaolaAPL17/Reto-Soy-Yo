@@ -1,6 +1,7 @@
 package com.reto.soyyo.controllers;
 
-import com.reto.soyyo.models.Progress;
+import com.reto.soyyo.dtos.progress.ProgressRequest;
+import com.reto.soyyo.dtos.progress.ProgressResponse;
 import com.reto.soyyo.services.ProgressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,29 +18,24 @@ public class ProgressController {
     private final ProgressService progressService;
 
     @PostMapping
-    public ResponseEntity<Progress> createProgress(@RequestBody Progress progress) {
-        Progress createdProgress = progressService.saveProgress(progress);
-        return new ResponseEntity<>(createdProgress, HttpStatus.CREATED);
+    public ResponseEntity<ProgressResponse> createProgress(@RequestBody ProgressRequest request) {
+        return new ResponseEntity<>(progressService.createProgress(request), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Progress>> getAllProgress() {
-        List<Progress> progressList = progressService.getAllProgress();
-        return new ResponseEntity<>(progressList, HttpStatus.OK);
+    public ResponseEntity<List<ProgressResponse>> getAllProgress() {
+        return new ResponseEntity<>(progressService.getAllProgress(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Progress> getProgressById(@PathVariable Long id) {
-        return progressService.getProgressById(id)
-                .map(progress -> new ResponseEntity<>(progress, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<ProgressResponse> getProgressById(@PathVariable Long id) {
+        return new ResponseEntity<>(progressService.getProgressById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Progress> updateProgress(@PathVariable Long id, @RequestBody Progress progressDetails) {
-        return progressService.updateProgress(id, progressDetails)
-                .map(updatedProgress -> new ResponseEntity<>(updatedProgress, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<ProgressResponse> updateProgress(@PathVariable Long id,
+                                                           @RequestBody ProgressRequest request) {
+        return new ResponseEntity<>(progressService.updateProgress(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
