@@ -1,6 +1,7 @@
 package com.reto.soyyo.controllers;
 
-import com.reto.soyyo.models.Challenge;
+import com.reto.soyyo.dtos.challenge.ChallengeRequest;
+import com.reto.soyyo.dtos.challenge.ChallengeResponse;
 import com.reto.soyyo.services.ChallengeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,29 +18,24 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @PostMapping
-    public ResponseEntity<Challenge> createChallenge(@RequestBody Challenge challenge) {
-        Challenge createdChallenge = challengeService.saveChallenge(challenge);
-        return new ResponseEntity<>(createdChallenge, HttpStatus.CREATED);
+    public ResponseEntity<ChallengeResponse> createChallenge(@RequestBody ChallengeRequest request) {
+        return new ResponseEntity<>(challengeService.createChallenge(request), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Challenge>> getAllChallenges() {
-        List<Challenge> challenges = challengeService.getAllChallenges();
-        return new ResponseEntity<>(challenges, HttpStatus.OK);
+    public ResponseEntity<List<ChallengeResponse>> getAllChallenges() {
+        return new ResponseEntity<>(challengeService.getAllChallenges(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Challenge> getChallengeById(@PathVariable Long id) {
-        return challengeService.getChallengeById(id)
-                .map(challenge -> new ResponseEntity<>(challenge, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<ChallengeResponse> getChallengeById(@PathVariable Long id) {
+        return new ResponseEntity<>(challengeService.getChallengeById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Challenge> updateChallenge(@PathVariable Long id, @RequestBody Challenge challengeDetails) {
-        return challengeService.updateChallenge(id, challengeDetails)
-                .map(updatedChallenge -> new ResponseEntity<>(updatedChallenge, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<ChallengeResponse> updateChallenge(@PathVariable Long id,
+                                                             @RequestBody ChallengeRequest request) {
+        return new ResponseEntity<>(challengeService.updateChallenge(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
