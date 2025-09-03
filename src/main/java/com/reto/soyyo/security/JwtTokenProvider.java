@@ -1,4 +1,4 @@
-package com.reto.soyyo.security.jwt;
+package com.reto.soyyo.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -8,7 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.security.Signature;
 import java.util.Date;
 
 @Component

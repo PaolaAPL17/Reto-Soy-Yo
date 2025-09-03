@@ -1,11 +1,8 @@
 package com.reto.soyyo.services;
 
-package com.reto.soyyo.services;
-
 import com.reto.soyyo.dtos.auth.LoginRequestDto;
 import com.reto.soyyo.dtos.auth.LoginResponseDto;
 import com.reto.soyyo.security.JwtTokenProvider;
-import com.reto.soyyo.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +19,7 @@ public class AuthService {
 
     public LoginResponseDto authenticateUser(LoginRequestDto loginRequestDto) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtTokenProvider.generateToken(authentication);
