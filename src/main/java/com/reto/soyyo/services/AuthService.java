@@ -42,7 +42,10 @@ public class AuthService {
 
     public LoginResponseDto authenticateUser(LoginRequestDto loginRequestDto) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequestDto.email(), loginRequestDto.password())
+                new UsernamePasswordAuthenticationToken(
+                        loginRequestDto.getEmail(),
+                        loginRequestDto.getPassword()
+                )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtTokenProvider.generateToken(authentication);

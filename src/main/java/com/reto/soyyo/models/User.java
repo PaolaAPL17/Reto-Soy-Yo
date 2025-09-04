@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import javax.management.relation.Role;
+
 import java.util.HashSet;
 import java.util.Set;
 

@@ -10,7 +10,7 @@ public class UserMapper {
         user.setUsername(request.username());
         user.setEmail(request.email());
         user.setPassword(request.password());
-        user.setRol(Role.valueOf(request.rol().toUpperCase()));
+        user.setRole(Role.valueOf(request.rol().toUpperCase()));
         return user;
     }
 
