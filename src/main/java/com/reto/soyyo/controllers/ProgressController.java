@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,7 @@ public class ProgressController {
     private final ProgressService progressService;
 
     @PostMapping
-    public ResponseEntity<ProgressResponse> createProgress(@RequestBody ProgressRequest request) {
+    public ResponseEntity<ProgressResponse> createProgress(@Valid @RequestBody ProgressRequest request) {
         return new ResponseEntity<>(progressService.createProgress(request), HttpStatus.CREATED);
     }
 
@@ -32,13 +33,18 @@ public class ProgressController {
         return new ResponseEntity<>(progressService.getProgressById(id), HttpStatus.OK);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ProgressResponse>> getProgressByUser(@PathVariable Long userId) {
+        return new ResponseEntity<>(progressService.getProgressByUser(userId), HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ProgressResponse> updateProgress(@PathVariable Long id,
-                                                           @RequestBody ProgressRequest request) {
+                                                           @Valid @RequestBody ProgressRequest request) {
         return new ResponseEntity<>(progressService.updateProgress(id, request), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+      @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProgress(@PathVariable Long id) {
         progressService.deleteProgress(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
