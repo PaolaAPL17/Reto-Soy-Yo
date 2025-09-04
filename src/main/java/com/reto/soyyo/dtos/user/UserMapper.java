@@ -1,6 +1,7 @@
 package com.reto.soyyo.dtos.user;
 
 import com.reto.soyyo.models.User;
+import com.reto.soyyo.models.Role;
 
 public class UserMapper {
 
@@ -9,6 +10,7 @@ public class UserMapper {
         user.setUsername(request.username());
         user.setEmail(request.email());
         user.setPassword(request.password());
+        user.setRol(Role.valueOf(request.rol().toUpperCase()));
         return user;
     }
 
@@ -16,7 +18,8 @@ public class UserMapper {
         return new UserResponse(
                 user.getId(),
                 user.getUsername(),
-                user.getEmail()
+                user.getEmail(),
+                user.getRol().name()
         );
     }
 }

@@ -1,7 +1,9 @@
 package com.reto.soyyo.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -27,6 +29,7 @@ public class User {
 
     @Column(unique = true,nullable = false, length = 100)
     @NotBlank(message = "The email is required")
+    @Email(message = "Please provide a valid email address", regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
     private String email;
 
 
@@ -36,8 +39,9 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role rol;
+    private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Progress> progressList = new HashSet<>();
 }
+
