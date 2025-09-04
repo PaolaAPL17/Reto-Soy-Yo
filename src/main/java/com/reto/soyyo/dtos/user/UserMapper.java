@@ -19,7 +19,7 @@ public class UserMapper {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getRol().name()
+                user.getRole().name()
         );
     }
 }
