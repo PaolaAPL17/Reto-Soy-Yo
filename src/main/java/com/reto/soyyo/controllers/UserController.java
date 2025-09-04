@@ -43,4 +43,12 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PostMapping("/{userId}/asign/{challengeId}")
+    public ResponseEntity<Void> assignChallengeToUser(
+            @PathVariable Long userId,
+            @PathVariable Long challengeId) {
+        userService.assignChallengeToUser(userId, challengeId);
+        return ResponseEntity.ok().build();
+    }
+
 }

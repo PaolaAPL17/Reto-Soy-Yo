@@ -65,7 +65,7 @@ public class UserService {
 
     public void assignChallengeToUser(Long userId, Long challengeId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId);
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new EntityNotFoundException("Challenge not found with id: " + challengeId));
