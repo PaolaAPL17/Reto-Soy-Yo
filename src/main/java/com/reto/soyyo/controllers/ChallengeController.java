@@ -3,6 +3,7 @@ package com.reto.soyyo.controllers;
 import com.reto.soyyo.dtos.challenge.ChallengeRequest;
 import com.reto.soyyo.dtos.challenge.ChallengeResponse;
 import com.reto.soyyo.services.ChallengeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,9 @@ public class ChallengeController {
 
     private final ChallengeService challengeService;
 
-
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ChallengeResponse> createChallenge(@RequestBody ChallengeRequest request) {
+    public ResponseEntity<ChallengeResponse> createChallenge(@Valid @RequestBody ChallengeRequest request) {
         return new ResponseEntity<>(challengeService.createChallenge(request), HttpStatus.CREATED);
     }
 
@@ -37,7 +37,8 @@ public class ChallengeController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ChallengeResponse> updateChallenge(@PathVariable Long id,@RequestBody ChallengeRequest request) {
+    public ResponseEntity<ChallengeResponse> updateChallenge(@PathVariable Long id,
+                                                             @Valid @RequestBody ChallengeRequest request) {
         return new ResponseEntity<>(challengeService.updateChallenge(id, request), HttpStatus.OK);
     }
 

@@ -26,6 +26,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
+        String path = request.getRequestURI();
+
+        // Si la ruta es /api/auth/** no chequeamos el token (pasa directo)
+        if (path.startsWith("/api/auth/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // Si la ruta no es pública, hacemos validación normal
         String token = getJwtFromRequest(request);
         if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
             String email = jwtTokenProvider.getUsernameFromJWT(token);
@@ -37,6 +47,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
+
         filterChain.doFilter(request, response);
     }
 
