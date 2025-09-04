@@ -12,6 +12,7 @@ import com.reto.soyyo.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,9 +25,11 @@ public class ProgressService {
     private final UserRepository userRepository;
     private final ChallengeRepository challengeRepository;
 
+    @Transactional
     public ProgressResponse createProgress(ProgressRequest request) {
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + request.userId()));
+
         Challenge challenge = challengeRepository.findById(request.challengeId())
                 .orElseThrow(() -> new EntityNotFoundException("Challenge not found with id: " + request.challengeId()));
 
@@ -47,6 +50,17 @@ public class ProgressService {
                 .orElseThrow(() -> new EntityNotFoundException("Progress not found with id: " + id));
     }
 
+    public List<ProgressResponse> getProgressByUser(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new EntityNotFoundException("User not found with id: " + userId);
+        }
+        return progressRepository.findByUser_Id(userId)
+                .stream()
+                .map(ProgressMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public ProgressResponse updateProgress(Long id, ProgressRequest request) {
         Progress progress = progressRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Progress not found with id: " + id));
@@ -69,6 +83,7 @@ public class ProgressService {
         return ProgressMapper.toDto(progressRepository.save(progress));
     }
 
+    @Transactional
     public void deleteProgress(Long id) {
         if (!progressRepository.existsById(id)) {
             throw new EntityNotFoundException("Progress not found with id: " + id);
