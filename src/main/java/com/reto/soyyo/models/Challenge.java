@@ -34,4 +34,7 @@ public class Challenge {
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Progress> progressList  = new HashSet<>();
+
+    @ManyToMany(mappedBy = "challenges")
+    private Set<User> users = new HashSet<>();
 }

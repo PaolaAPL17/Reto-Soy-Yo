@@ -43,5 +43,14 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Progress> progressList = new HashSet<>();
-}
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_challenges",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "challenge_id")
+    )
+    private Set<Challenge> challenges = new HashSet<>();
+
+    }
 

@@ -3,7 +3,9 @@ package com.reto.soyyo.services;
 import com.reto.soyyo.dtos.user.UserRequest;
 import com.reto.soyyo.dtos.user.UserResponse;
 import com.reto.soyyo.dtos.user.UserMapper;
+import com.reto.soyyo.models.Challenge;
 import com.reto.soyyo.models.User;
+import com.reto.soyyo.repositories.ChallengeRepository;
 import com.reto.soyyo.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ChallengeRepository challengeRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UserResponse createUser(UserRequest request) {
@@ -59,4 +62,16 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
+
+    public void assignChallengeToUser(Long userId, Long challengeId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId);
+
+        Challenge challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(() -> new EntityNotFoundException("Challenge not found with id: " + challengeId));
+
+        user.getChallenges().add(challenge);
+        userRepository.save(user);
+    }
+
 }
