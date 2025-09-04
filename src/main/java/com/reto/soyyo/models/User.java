@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import javax.management.relation.Role;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,6 +34,9 @@ public class User {
     @NotBlank(message = "The password is required")
     @Size(min = 60,max = 100)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role rol;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Progress> progressList = new HashSet<>();
