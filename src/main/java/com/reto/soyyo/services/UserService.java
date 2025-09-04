@@ -8,6 +8,7 @@ import com.reto.soyyo.models.User;
 import com.reto.soyyo.repositories.ChallengeRepository;
 import com.reto.soyyo.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -63,6 +64,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    @Transactional
     public void assignChallengeToUser(Long userId, Long challengeId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));

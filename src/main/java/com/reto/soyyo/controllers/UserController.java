@@ -10,6 +10,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import com.reto.soyyo.dtos.user.UserRequest;
+import com.reto.soyyo.dtos.user.UserResponse;
+import com.reto.soyyo.services.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -43,7 +54,8 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/{userId}/asign/{challengeId}")
+    @PostMapping("/{userId}/challenges/{challengeId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> assignChallengeToUser(
             @PathVariable Long userId,
             @PathVariable Long challengeId) {
