@@ -8,6 +8,7 @@ import com.reto.soyyo.repositories.ChallengeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
 
+    @Transactional
     public ChallengeResponse createChallenge(ChallengeRequest request) {
         Challenge challenge = ChallengeMapper.toEntity(request);
         return ChallengeMapper.toDto(challengeRepository.save(challenge));
@@ -36,6 +38,7 @@ public class ChallengeService {
                 .orElseThrow(() -> new EntityNotFoundException("Challenge not found with id: " + id));
     }
 
+    @Transactional
     public ChallengeResponse updateChallenge(Long id, ChallengeRequest request) {
         Challenge challenge = challengeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Challenge not found with id: " + id));
@@ -46,6 +49,7 @@ public class ChallengeService {
         return ChallengeMapper.toDto(challengeRepository.save(challenge));
     }
 
+    @Transactional
     public void deleteChallenge(Long id) {
         if (!challengeRepository.existsById(id)) {
             throw new EntityNotFoundException("Challenge not found with id: " + id);
