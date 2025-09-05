@@ -6,8 +6,8 @@ import com.reto.soyyo.services.ProgressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
@@ -38,19 +38,20 @@ public class ProgressController {
     }
 
     @GetMapping("/user/{userId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<ProgressResponse>> getProgressByUser(@PathVariable Long userId) {
         return new ResponseEntity<>(progressService.getProgressByUser(userId), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProgressResponse> updateProgress(@PathVariable Long id,
                                                            @Valid @RequestBody ProgressRequest request) {
         return new ResponseEntity<>(progressService.updateProgress(id, request), HttpStatus.OK);
     }
 
-      @DeleteMapping("/{id}")
-      @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProgress(@PathVariable Long id) {
         progressService.deleteProgress(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
