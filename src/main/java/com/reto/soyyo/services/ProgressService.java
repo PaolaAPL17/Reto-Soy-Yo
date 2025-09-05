@@ -11,11 +11,11 @@ import com.reto.soyyo.repositories.ProgressRepository;
 import com.reto.soyyo.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +30,12 @@ public class ProgressService {
 
     @Transactional
     public ProgressResponse createProgress(ProgressRequest request) {
+        User currentUser = getAuthenticatedUser();
+
+        if (!currentUser.getRol().equals("ADMIN") && !currentUser.getId().equals(request.userId())) {
+            throw new SecurityException("Users can only create their own progress");
+        }
+
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + request.userId()));
 
@@ -54,9 +60,16 @@ public class ProgressService {
     }
 
     public List<ProgressResponse> getProgressByUser(Long userId) {
+        User currentUser = getAuthenticatedUser();
+
+        if (!currentUser.getRol().equals("ADMIN") && !currentUser.getId().equals(userId)) {
+            throw new SecurityException("Users can only view their own progress");
+        }
+
         if (!userRepository.existsById(userId)) {
             throw new EntityNotFoundException("User not found with id: " + userId);
         }
+
         return progressRepository.findByUser_Id(userId)
                 .stream()
                 .map(ProgressMapper::toDto)
@@ -92,5 +105,15 @@ public class ProgressService {
             throw new EntityNotFoundException("Progress not found with id: " + id);
         }
         progressRepository.deleteById(id);
+    }
+
+    private User getAuthenticatedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new SecurityException("No authenticated user found");
+        }
+        String email = ((UserDetails) auth.getPrincipal()).getUsername();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Authenticated user not found"));
     }
 }
