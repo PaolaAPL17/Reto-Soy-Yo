@@ -4,7 +4,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.*;
 
 public record UserRequest (
         @NotBlank(message = "Username is required")
@@ -16,10 +15,13 @@ public record UserRequest (
         String email,
 
         @NotBlank(message = "The password is required")
-        @Pattern(message = "Password must contain a minimum of 8 characters, including a number, one uppercase letter, one lowercase letter and one special character", regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.])(?=\\S+$).{8,}$")
+        @Pattern(
+                message = "Password must contain at least 8 characters, including a number, one uppercase letter, one lowercase letter and one special character",
+                regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.])(?=\\S+$).{8,}$"
+        )
         String password,
 
-        @NotBlank(message = "The role is required (USER O ADMIN")
+        @NotBlank(message = "The role is required (USER or ADMIN)")
         String rol
 ) {
 }
