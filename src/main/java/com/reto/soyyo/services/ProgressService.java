@@ -32,7 +32,7 @@ public class ProgressService {
     public ProgressResponse createProgress(ProgressRequest request) {
         User currentUser = getAuthenticatedUser();
 
-        if (!currentUser.getRol().equals("ADMIN") && !currentUser.getId().equals(request.userId())) {
+        if (!currentUser.getRole().equals("ADMIN") && !currentUser.getId().equals(request.userId())) {
             throw new SecurityException("Users can only create their own progress");
         }
 
@@ -62,7 +62,7 @@ public class ProgressService {
     public List<ProgressResponse> getProgressByUser(Long userId) {
         User currentUser = getAuthenticatedUser();
 
-        if (!currentUser.getRol().equals("ADMIN") && !currentUser.getId().equals(userId)) {
+        if (!currentUser.getRole().equals("ADMIN") && !currentUser.getId().equals(userId)) {
             throw new SecurityException("Users can only view their own progress");
         }
 
