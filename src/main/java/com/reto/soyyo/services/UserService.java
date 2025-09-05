@@ -72,7 +72,10 @@ public class UserService {
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new EntityNotFoundException("Challenge not found with id: " + challengeId));
 
-        user.getChallenges().add(challenge);
+        if (!user.getChallenges().contains(challenge)) {
+            user.getChallenges().add(challenge);
+        }
+
         userRepository.save(user);
     }
 
