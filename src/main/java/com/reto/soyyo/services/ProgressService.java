@@ -107,7 +107,7 @@ public class ProgressService {
         progressRepository.deleteById(id);
     }
 
-    private User getAuthenticatedUser() {
+    User getAuthenticatedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated()) {
             throw new SecurityException("No authenticated user found");
